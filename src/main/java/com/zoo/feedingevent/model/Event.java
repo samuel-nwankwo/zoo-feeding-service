@@ -1,6 +1,6 @@
 package com.zoo.feedingevent.model;
 
 
-public class FeedingEvent {
+public class Event {
 
 }

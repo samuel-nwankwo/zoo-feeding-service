@@ -1,4 +1,4 @@
 package com.zoo.feedingevent.repository;
 
-public interface FeedingEventRepository {
+public interface EventRepository {
 }
