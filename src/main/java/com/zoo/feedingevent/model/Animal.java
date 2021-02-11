@@ -20,6 +20,5 @@ public class Animal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @NonNull
     private String breed;
 }
