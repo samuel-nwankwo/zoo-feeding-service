@@ -36,4 +36,11 @@ public class FoodController{
         return ResponseEntity.created(new URI("/food/" + result.getId()))
                 .body(result);
     }
+    @PutMapping("/food/{id}")
+    ResponseEntity<Food> updateFood(@Validated @RequestBody Food food) {
+        log.info("Request to update food: {}", food);
+        Food result = foodRepository.save(food);
+        return ResponseEntity.ok().body(result);
+    }
+
 }
