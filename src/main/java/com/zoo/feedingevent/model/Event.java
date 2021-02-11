@@ -1,9 +1,7 @@
 package com.zoo.feedingevent.model;
 
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -11,6 +9,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Entity
 public class Event {
@@ -20,6 +19,7 @@ public class Event {
     private Instant date;
     private String title;
     private String description;
+
     @ManyToMany
     private Set<Food> foods;
     @ManyToMany
