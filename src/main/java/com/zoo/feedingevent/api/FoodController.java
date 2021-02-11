@@ -22,6 +22,12 @@ public class FoodController{
     public FoodController(FoodRepository foodRepository) {
         this.foodRepository= foodRepository;
     }
+    @GetMapping("/food/{id}")
+    ResponseEntity<?> getFoodById(@PathVariable Long id) {
+        Optional<Food> food = foodRepository.findById(id);
+        return food.map(response -> ResponseEntity.ok().body(response))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
     @PostMapping("/food")
     ResponseEntity<Food> createFood(@Validated @RequestBody Food food) throws URISyntaxException {
