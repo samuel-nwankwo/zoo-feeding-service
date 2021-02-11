@@ -1,4 +1,8 @@
 package com.zoo.feedingevent.api;
 
-public class FoodController {
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class FoodController{
+
 }
