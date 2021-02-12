@@ -42,5 +42,10 @@ public class FoodController{
         Food result = foodRepository.save(food);
         return ResponseEntity.ok().body(result);
     }
-
+    @DeleteMapping("/food/{id}")
+    public ResponseEntity<?> deleteFood(@PathVariable Long id) {
+        log.info("Request to delete food: {}", id);
+        foodRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
