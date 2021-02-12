@@ -22,6 +22,7 @@ public class FoodController{
         this.foodRepository= foodRepository;
     }
     @GetMapping("/food/{id}")
+
     public ResponseEntity<?> getFoodById(@PathVariable Long id) {
         Optional<Food> food = foodRepository.findById(id);
         return food.map(response -> ResponseEntity.ok().body(response))
