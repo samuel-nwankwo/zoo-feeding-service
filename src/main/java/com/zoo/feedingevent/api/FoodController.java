@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,8 +22,12 @@ public class FoodController{
     public FoodController(FoodRepository foodRepository) {
         this.foodRepository= foodRepository;
     }
+    @GetMapping("/food")
+    public ResponseEntity<Iterable<Food>> getAllFoods() {
+        Iterable<Food> foods = foodRepository.findAll();
+        return new ResponseEntity<>(foods, HttpStatus.OK);
+    }
     @GetMapping("/food/{id}")
-
     public ResponseEntity<?> getFoodById(@PathVariable Long id) {
         Optional<Food> food = foodRepository.findById(id);
         return food.map(response -> ResponseEntity.ok().body(response))
