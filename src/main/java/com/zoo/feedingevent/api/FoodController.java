@@ -22,21 +22,21 @@ public class FoodController{
         this.foodRepository= foodRepository;
     }
     @GetMapping("/food/{id}")
-    ResponseEntity<?> getFoodById(@PathVariable Long id) {
+    public ResponseEntity<?> getFoodById(@PathVariable Long id) {
         Optional<Food> food = foodRepository.findById(id);
         return food.map(response -> ResponseEntity.ok().body(response))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/food")
-    ResponseEntity<Food> createFood(@Validated @RequestBody Food food) throws URISyntaxException {
+    public ResponseEntity<Food> createFood(@Validated @RequestBody Food food) throws URISyntaxException {
         log.info("Request to create food: {}", food);
         Food result = foodRepository.save(food);
         return ResponseEntity.created(new URI("/food/" + result.getId()))
                 .body(result);
     }
     @PutMapping("/food/{id}")
-    ResponseEntity<Food> updateFood(@Validated @RequestBody Food food) {
+    public ResponseEntity<Food> updateFood(@Validated @RequestBody Food food) {
         log.info("Request to update food: {}", food);
         Food result = foodRepository.save(food);
         return ResponseEntity.ok().body(result);
