@@ -1,5 +1,7 @@
 package com.zoo.feedingevent.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,6 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +66,19 @@ public class FoodControllerTest {
         Food hay = new Food(2L, "hay");
         Mockito.when(foodRepository.save(ArgumentMatchers.any())).thenReturn(hay);
         String json = mapper.writeValueAsString(hay);
-        mockMvc.perform(put("/food/2").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
-                .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+        mockMvc.perform((MockMvcRequestBuilders.put("/food/{id}","2").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                .content(json).accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.equalTo(2)))
                 .andExpect(jsonPath("$.name", Matchers.equalTo("hay")));
     }
 
+    @Test
+    public void testDeleteFood() throws Exception {
+        Food hay = new Food(1L, "hay");
+        mockMvc.perform(MockMvcRequestBuilders
+                .delete("/food/{id}", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 }
