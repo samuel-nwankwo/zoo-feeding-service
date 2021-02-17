@@ -60,9 +60,9 @@ public class FoodControllerTest {
     }
     @Test
     public void testUpdateFood() throws Exception {
-        Food food = new Food(2L, "hay");
-        Mockito.when(foodRepository.save(ArgumentMatchers.any())).thenReturn(food);
-        String json = mapper.writeValueAsString(food);
+        Food hay = new Food(2L, "hay");
+        Mockito.when(foodRepository.save(ArgumentMatchers.any())).thenReturn(hay);
+        String json = mapper.writeValueAsString(hay);
         mockMvc.perform(put("/food/2").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
                 .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.equalTo(2)))
