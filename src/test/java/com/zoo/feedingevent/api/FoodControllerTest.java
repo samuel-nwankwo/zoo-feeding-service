@@ -39,14 +39,12 @@ public class FoodControllerTest {
     public void testGetAllFoods() throws Exception {
         List<Food> foodList = new ArrayList<>();
         Food grass = new Food(1L,"grass");
-        Food hay = new Food(2L,"hay");
-
         foodList.add(grass);
-        foodList.add(hay);
         Mockito.when(foodRepository.findAll()).thenReturn(foodList);
         mockMvc.perform(get("/food")).andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.hasSize(2)))
+                .andExpect(jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(jsonPath("$[0].name", Matchers.equalTo("grass")));
+
     }
 
     @Test
