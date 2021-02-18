@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zoo.feedingevent.model.Animal;
 import com.zoo.feedingevent.model.Food;
 import com.zoo.feedingevent.repository.FoodRepository;
 import org.hamcrest.Matchers;
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @WebMvcTest
@@ -49,6 +51,18 @@ public class FoodControllerTest {
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(jsonPath("$[0].name", Matchers.equalTo("grass")));
 
+    }
+    @Test
+    public void testGetFoodById() throws Exception {
+        Food food = new Food(1L,"grass");
+
+        Mockito.when(foodRepository.findById(ArgumentMatchers.any()))
+                .thenReturn(Optional.of(food));
+        mockMvc.perform((MockMvcRequestBuilders.get("/food/{id}", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
+                .andExpect(jsonPath("$.name", Matchers.equalTo("grass")));
     }
 
     @Test
