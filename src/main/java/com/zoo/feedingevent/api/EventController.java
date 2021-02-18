@@ -1,16 +1,14 @@
 package com.zoo.feedingevent.api;
-
-import com.zoo.feedingevent.model.Animal;
 import com.zoo.feedingevent.model.Event;
 import com.zoo.feedingevent.repository.EventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +35,11 @@ public class EventController {
         return event.map(response -> ResponseEntity.ok().body(response))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-
-
+    @PostMapping("/event")
+    public ResponseEntity<Event> createEvent(@Validated @RequestBody Event event) throws URISyntaxException {
+        log.info("Request to create event: {}", event);
+        Event result = eventRepository.save(event);
+        return ResponseEntity.created(new URI("/event/" + result.getId()))
+                .body(result);
+    }
 }
