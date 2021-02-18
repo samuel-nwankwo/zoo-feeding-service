@@ -42,4 +42,10 @@ public class EventController {
         return ResponseEntity.created(new URI("/event/" + result.getId()))
                 .body(result);
     }
+    @PutMapping("/event/{id}")
+    public ResponseEntity<Event> updateEvent(@Validated @RequestBody Event event) {
+        log.info("Request to update event: {}", event);
+        Event result = eventRepository.save(event);
+        return ResponseEntity.ok().body(result);
+    }
 }
