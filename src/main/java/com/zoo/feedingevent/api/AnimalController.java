@@ -39,10 +39,16 @@ public class AnimalController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     @PostMapping("/animal")
-    public ResponseEntity<Animal> createFood(@Validated @RequestBody Animal animal) throws URISyntaxException {
+    public ResponseEntity<Animal> createAnimal(@Validated @RequestBody Animal animal) throws URISyntaxException {
         log.info("Request to create animal: {}", animal);
         Animal result = animalRepository.save(animal);
         return ResponseEntity.created(new URI("/animal/" + result.getId()))
                 .body(result);
+    }
+    @PutMapping("/animal/{id}")
+    public ResponseEntity<Animal> updateAnimal(@Validated @RequestBody Animal animal) {
+        log.info("Request to update animal: {}", animal);
+        Animal result = animalRepository.save(animal);
+        return ResponseEntity.ok().body(result);
     }
 }
