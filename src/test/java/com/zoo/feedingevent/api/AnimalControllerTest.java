@@ -2,6 +2,7 @@ package com.zoo.feedingevent.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoo.feedingevent.model.Animal;
+import com.zoo.feedingevent.model.Food;
 import com.zoo.feedingevent.repository.AnimalRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,4 +77,5 @@ public class AnimalControllerTest {
                 .andExpect(jsonPath("$.name", Matchers.equalTo("mufasa")))
                 .andExpect(jsonPath("$.breed", Matchers.equalTo("lion")));
     }
+
 }
