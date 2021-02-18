@@ -38,4 +38,5 @@ public class EventController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+
 }
