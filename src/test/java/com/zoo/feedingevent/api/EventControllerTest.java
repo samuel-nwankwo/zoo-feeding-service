@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,23 +36,34 @@ public class EventControllerTest {
     @Test
     public void testGetAllEvents() throws Exception {
         List<Event> eventList = new ArrayList<>();
-        Event event1 = new Event("A new feeding event");
+        Event event1 = new Event("Listing all events");
         eventList.add(event1);
         Mockito.when(eventRepository.findAll()).thenReturn(eventList);
         mockMvc.perform(get("/")).andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(jsonPath("$[0].title", Matchers
-                .equalTo("A new feeding event")));
+                .equalTo("Listing all events")));
     }
     @Test
     public void testGetEventById() throws Exception {
-         Event event2 = new Event("An old feeding event");
+         Event event2 = new Event("Finding event by id");
 
         Mockito.when(eventRepository.findById(ArgumentMatchers.any()))
                 .thenReturn(Optional.of(event2));
         mockMvc.perform((MockMvcRequestBuilders.get("/event/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.title", Matchers.equalTo("An old feeding event")));
+                .andExpect(jsonPath("$.title", Matchers.equalTo("Finding event by id")));
+    }
+    @Test
+    public void testCreateEvent() throws Exception {
+        Event event3 = new Event("Creating an event");
+        Mockito.when(eventRepository.save(ArgumentMatchers.any())).thenReturn(event3);
+        String json = mapper.writeValueAsString(event3);
+        mockMvc.perform(post("/event").contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status()
+                .isCreated())
+                .andExpect(jsonPath("$.title", Matchers.equalTo("Creating an event")));
     }
 }
