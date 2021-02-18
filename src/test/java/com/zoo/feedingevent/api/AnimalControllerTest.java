@@ -2,7 +2,6 @@ package com.zoo.feedingevent.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoo.feedingevent.model.Animal;
-import com.zoo.feedingevent.model.Food;
 import com.zoo.feedingevent.repository.AnimalRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
