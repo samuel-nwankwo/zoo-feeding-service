@@ -15,6 +15,7 @@ import java.util.Set;
 @Entity
 public class Event {
     @Id
+    @NonNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Instant date;
@@ -25,5 +26,4 @@ public class Event {
     private Set<Food> foods;
     @ManyToMany
     private Set<Animal> animals;
-
 }
