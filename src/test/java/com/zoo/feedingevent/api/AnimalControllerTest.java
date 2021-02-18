@@ -2,6 +2,7 @@ package com.zoo.feedingevent.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoo.feedingevent.model.Animal;
+import com.zoo.feedingevent.model.Food;
 import com.zoo.feedingevent.repository.AnimalRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -82,6 +83,16 @@ public class AnimalControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.equalTo(2)))
                 .andExpect(jsonPath("$.name", Matchers.equalTo("nala")))
                 .andExpect(jsonPath("$.breed", Matchers.equalTo("lion")));
+    }
+
+    @Test
+    public void testDeleteAnimal() throws Exception {
+        Animal lion = new Animal(1L, "scar","lion");
+        mockMvc.perform(MockMvcRequestBuilders
+                .delete("/animal/{id}", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
 }
