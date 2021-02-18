@@ -35,35 +35,48 @@ public class EventControllerTest {
 
     @Test
     public void testGetAllEvents() throws Exception {
+        String title = "Listing all events";
         List<Event> eventList = new ArrayList<>();
-        Event event1 = new Event("Listing all events");
+        Event event1 = new Event(1L,title);
         eventList.add(event1);
         Mockito.when(eventRepository.findAll()).thenReturn(eventList);
         mockMvc.perform(get("/")).andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
-                .andExpect(jsonPath("$[0].title", Matchers
-                .equalTo("Listing all events")));
+                .andExpect(jsonPath("$[0].title", Matchers.equalTo(title)));
     }
     @Test
     public void testGetEventById() throws Exception {
-         Event event2 = new Event("Finding event by id");
-
+        String title = "Finding event by id";
+        Event event2 = new Event(1L,title);
         Mockito.when(eventRepository.findById(ArgumentMatchers.any()))
                 .thenReturn(Optional.of(event2));
         mockMvc.perform((MockMvcRequestBuilders.get("/event/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.title", Matchers.equalTo("Finding event by id")));
+                .andExpect(jsonPath("$.title", Matchers.equalTo(title)));
     }
     @Test
     public void testCreateEvent() throws Exception {
-        Event event3 = new Event("Creating an event");
+        String title = "Creating an event";
+        Event event3 = new Event(1L,title);
         Mockito.when(eventRepository.save(ArgumentMatchers.any())).thenReturn(event3);
         String json = mapper.writeValueAsString(event3);
         mockMvc.perform(post("/event").contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status()
                 .isCreated())
-                .andExpect(jsonPath("$.title", Matchers.equalTo("Creating an event")));
+                .andExpect(jsonPath("$.title", Matchers.equalTo(title)));
+    }
+    @Test
+    public void testUpdateEvent() throws Exception {
+        String title = "Updating event";
+        Event event4 = new Event(1L,title);
+        Mockito.when(eventRepository.save(ArgumentMatchers.any())).thenReturn(event4);
+        String json = mapper.writeValueAsString(event4);
+        mockMvc.perform((MockMvcRequestBuilders.put("/event/{id}","1")
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+                .content(json).accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
+                .andExpect(jsonPath("$.title", Matchers.equalTo(title)));
     }
 }
