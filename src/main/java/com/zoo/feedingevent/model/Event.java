@@ -17,9 +17,9 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Instant date;
+    @NonNull
     private String title;
     private String description;
-
     @ManyToMany
     private Set<Food> foods;
     @ManyToMany
