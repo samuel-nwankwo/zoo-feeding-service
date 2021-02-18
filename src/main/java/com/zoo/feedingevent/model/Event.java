@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.Set;
 
 @Data
+@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
