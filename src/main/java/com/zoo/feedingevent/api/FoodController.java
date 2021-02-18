@@ -23,6 +23,7 @@ public class FoodController{
     public FoodController(FoodRepository foodRepository) {
         this.foodRepository= foodRepository;
     }
+
     @GetMapping("/food")
     public ResponseEntity<List<Food>> getAllFoods() {
         List<Food> foods = new ArrayList<>();
