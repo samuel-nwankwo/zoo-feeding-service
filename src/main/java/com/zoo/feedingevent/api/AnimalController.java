@@ -51,4 +51,10 @@ public class AnimalController {
         Animal result = animalRepository.save(animal);
         return ResponseEntity.ok().body(result);
     }
+    @DeleteMapping("/animal/{id}")
+    public ResponseEntity<?> deleteAnimal(@PathVariable Long id) {
+        log.info("Request to delete animal: {}", id);
+        animalRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
