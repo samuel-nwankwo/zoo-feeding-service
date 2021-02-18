@@ -48,4 +48,10 @@ public class EventController {
         Event result = eventRepository.save(event);
         return ResponseEntity.ok().body(result);
     }
+    @DeleteMapping("/event/{id}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
+        log.info("Request to delete event: {}", id);
+        eventRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
