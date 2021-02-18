@@ -65,7 +65,8 @@ public class FoodControllerTest {
         Food hay = new Food(2L, "hay");
         Mockito.when(foodRepository.save(ArgumentMatchers.any())).thenReturn(hay);
         String json = mapper.writeValueAsString(hay);
-        mockMvc.perform((MockMvcRequestBuilders.put("/food/{id}","2").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
+        mockMvc.perform((MockMvcRequestBuilders.put("/food/{id}","2")
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
                 .content(json).accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.equalTo(2)))
                 .andExpect(jsonPath("$.name", Matchers.equalTo("hay")));
