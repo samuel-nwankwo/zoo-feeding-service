@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,6 +58,19 @@ public class AnimalControllerTest {
                 .accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
                 .andExpect(jsonPath("$.name", Matchers.equalTo("simba")))
+                .andExpect(jsonPath("$.breed", Matchers.equalTo("lion")));
+    }
+    @Test
+    public void testCreateAnimal() throws Exception {
+        Animal mufasa = new Animal(1L, "mufasa","lion");
+        Mockito.when(animalRepository.save(ArgumentMatchers.any())).thenReturn(mufasa);
+        String json = mapper.writeValueAsString(mufasa);
+        mockMvc.perform(post("/animal").contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status()
+                .isCreated())
+                .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
+                .andExpect(jsonPath("$.name", Matchers.equalTo("mufasa")))
                 .andExpect(jsonPath("$.breed", Matchers.equalTo("lion")));
     }
 }
