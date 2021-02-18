@@ -32,7 +32,7 @@ public class AnimalController {
         return new ResponseEntity<>(animals, HttpStatus.OK);
 
     }
-    @GetMapping("/food/{id}")
+    @GetMapping("/animal/{id}")
     public ResponseEntity<?> getAnimalById(@PathVariable Long id) {
         Optional<Animal> animal = animalRepository.findById(id);
         return animal.map(response -> ResponseEntity.ok().body(response))
