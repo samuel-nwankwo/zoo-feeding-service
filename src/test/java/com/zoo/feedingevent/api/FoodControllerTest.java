@@ -1,11 +1,7 @@
 package com.zoo.feedingevent.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @WebMvcTest(FoodController.class)
@@ -49,14 +46,28 @@ public class FoodControllerTest {
                 .andExpect(jsonPath("$[0].name", Matchers.equalTo("grass")));
 
     }
+    @Test
+    public void testGetFoodById() throws Exception {
+        Food food = new Food(1L,"grass");
+
+        Mockito.when(foodRepository.findById(ArgumentMatchers.any()))
+                .thenReturn(Optional.of(food));
+        mockMvc.perform((MockMvcRequestBuilders.get("/food/{id}", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
+                .andExpect(jsonPath("$.name", Matchers.equalTo("grass")));
+    }
 
     @Test
     public void testCreateFood() throws Exception {
         Food grass = new Food(1L, "grass");
         Mockito.when(foodRepository.save(ArgumentMatchers.any())).thenReturn(grass);
         String json = mapper.writeValueAsString(grass);
-        mockMvc.perform(post("/food").contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
-                .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status().isCreated())
+        mockMvc.perform(post("/food").contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status()
+                .isCreated())
                 .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
                 .andExpect(jsonPath("$.name", Matchers.equalTo("grass")));
     }
