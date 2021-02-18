@@ -46,7 +46,7 @@ public class EventControllerTest {
     }
     @Test
     public void testGetEventById() throws Exception {
-        String title = "Finding event by id";
+        String title = "Finding an event by id";
         Event event2 = new Event(1L,title);
         Mockito.when(eventRepository.findById(ArgumentMatchers.any()))
                 .thenReturn(Optional.of(event2));
@@ -69,7 +69,7 @@ public class EventControllerTest {
     }
     @Test
     public void testUpdateEvent() throws Exception {
-        String title = "Updating event";
+        String title = "Updating an event";
         Event event4 = new Event(1L,title);
         Mockito.when(eventRepository.save(ArgumentMatchers.any())).thenReturn(event4);
         String json = mapper.writeValueAsString(event4);
@@ -78,5 +78,14 @@ public class EventControllerTest {
                 .content(json).accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
                 .andExpect(jsonPath("$.title", Matchers.equalTo(title)));
+    }
+    @Test
+    public void testDeleteEvent() throws Exception {
+        Event lion = new Event(1L,"Delete an event");
+        mockMvc.perform(MockMvcRequestBuilders
+                .delete("/event/{id}", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }
