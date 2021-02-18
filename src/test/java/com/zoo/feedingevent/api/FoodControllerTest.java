@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@WebMvcTest
+@WebMvcTest(FoodController.class)
 public class FoodControllerTest {
 
     @Autowired
