@@ -56,12 +56,12 @@ public class AnimalController {
     @DeleteMapping("/animal/{id}")
     public ResponseEntity<?> deleteAnimal(@PathVariable Long id) {
         log.info("Request to delete animal: {}", id);
-        try {
+        Optional<Animal> animal = animalRepository.findById(id);
+        if(animal.isPresent()){
             animalRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }
-        catch(EmptyResultDataAccessException e){
-            log.error("System Error: {}", e.getMessage());
+        else{
             throw new AnimalNotFoundException();
         }
     }
