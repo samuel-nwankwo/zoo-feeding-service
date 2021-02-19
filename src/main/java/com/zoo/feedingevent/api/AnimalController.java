@@ -5,6 +5,7 @@ import com.zoo.feedingevent.model.Animal;
 import com.zoo.feedingevent.repository.AnimalRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -55,7 +56,13 @@ public class AnimalController {
     @DeleteMapping("/animal/{id}")
     public ResponseEntity<?> deleteAnimal(@PathVariable Long id) {
         log.info("Request to delete animal: {}", id);
-        animalRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        try {
+            animalRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        catch(EmptyResultDataAccessException e){
+            log.error("System Error: {}", e.getMessage());
+            throw new AnimalNotFoundException();
+        }
     }
 }
