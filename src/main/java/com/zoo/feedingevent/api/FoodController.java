@@ -1,9 +1,12 @@
 package com.zoo.feedingevent.api;
 
+import com.zoo.feedingevent.exception.EntityIsReferencedException;
+import com.zoo.feedingevent.exception.EntityNotFoundException;
 import com.zoo.feedingevent.model.Food;
 import com.zoo.feedingevent.repository.FoodRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -34,7 +37,7 @@ public class FoodController{
     public ResponseEntity<?> getFoodById(@PathVariable Long id) {
         Optional<Food> food = foodRepository.findById(id);
         return food.map(response -> ResponseEntity.ok().body(response))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @PostMapping("/food")
@@ -45,16 +48,30 @@ public class FoodController{
                 .body(result);
     }
     @PutMapping("/food/{id}")
-    public ResponseEntity<Food> updateFood(@Validated @RequestBody Food food) {
+    public ResponseEntity<Food> updateFood(@PathVariable(value = "id") Long id, @Validated @RequestBody Food food) {
         log.info("Request to update food: {}", food);
-        Food result = foodRepository.save(food);
-        return ResponseEntity.ok().body(result);
+        if(foodRepository.findById(id).isPresent()) {
+            Food result = foodRepository.save(food);
+            return ResponseEntity.ok().body(result);
+        }else{
+            throw new EntityNotFoundException();
+        }
     }
     @DeleteMapping("/food/{id}")
     public ResponseEntity<?> deleteFood(@PathVariable Long id) {
         log.info("Request to delete food: {}", id);
-        foodRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        Optional<Food> food = foodRepository.findById(id);
+        try{
+            if (food.isPresent()) {
+                foodRepository.deleteById(id);
+                return ResponseEntity.ok().build();
+            } else {
+                throw new EntityNotFoundException();
+            }
+        } catch (DataIntegrityViolationException e) {
+            log.error("System error: {}", e.getMessage());
+            throw new EntityIsReferencedException();
+        }
     }
 
 }
