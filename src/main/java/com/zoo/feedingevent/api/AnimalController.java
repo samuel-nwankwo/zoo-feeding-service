@@ -1,7 +1,7 @@
 package com.zoo.feedingevent.api;
 
-import com.zoo.feedingevent.exception.AnimalIsReferencedException;
-import com.zoo.feedingevent.exception.AnimalNotFoundException;
+import com.zoo.feedingevent.exception.EntityIsReferencedException;
+import com.zoo.feedingevent.exception.EntityNotFoundException;
 import com.zoo.feedingevent.model.Animal;
 import com.zoo.feedingevent.repository.AnimalRepository;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public class AnimalController {
     public ResponseEntity<?> getAnimalById(@PathVariable Long id) {
         Optional<Animal> animal = animalRepository.findById(id);
         return animal.map(response -> ResponseEntity.ok().body(response))
-                .orElseThrow(AnimalNotFoundException::new);
+                .orElseThrow(EntityNotFoundException::new);
     }
     @PostMapping("/animal")
     public ResponseEntity<Animal> createAnimal(@Validated @RequestBody Animal animal) throws URISyntaxException {
@@ -55,7 +55,7 @@ public class AnimalController {
             Animal result = animalRepository.save(animal);
             return ResponseEntity.ok().body(result);
         }else{
-            throw new AnimalNotFoundException();
+            throw new EntityNotFoundException();
         }
     }
     @DeleteMapping("/animal/{id}")
@@ -67,11 +67,11 @@ public class AnimalController {
                 animalRepository.deleteById(id);
                 return ResponseEntity.ok().build();
             } else {
-                throw new AnimalNotFoundException();
+                throw new EntityNotFoundException();
             }
         }catch(DataIntegrityViolationException e){
             log.error("System error: {}",e.getMessage());
-            throw new AnimalIsReferencedException();
+            throw new EntityIsReferencedException();
         }
 
     }
