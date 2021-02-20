@@ -41,25 +41,25 @@ public class Initializer implements CommandLineRunner {
         meats.add(foodRepository.findById(4L).orElse(null));
 
         Stream.of(
-                new Animal(1L,"cow1","cow"),
-                new Animal(2L,"cow2","cow"),
+                new Animal(1L,"zebra","zebra"),
+                new Animal(2L,"zebra","zebra"),
                 new Animal(3L, "lion1", "lion"),
                 new Animal(3L, "lion2", "lion")
         ).forEach(animalRepository::save);
-        Set<Animal> cows = new HashSet<>();
+        Set<Animal> zebras = new HashSet<>();
         Set<Animal> lions = new HashSet<>();
-        cows.add(animalRepository.findById(1L).orElse(null));
-        cows.add(animalRepository.findById(2L).orElse(null));
+        zebras.add(animalRepository.findById(1L).orElse(null));
+        zebras.add(animalRepository.findById(2L).orElse(null));
         lions.add(animalRepository.findById(3L).orElse(null));
         lions.add(animalRepository.findById(4L).orElse(null));
 
         Event event1 = Event.builder()
                 .id(1L)
                 .date(Instant.now())
-                .title("Feeding the cows")
-                .description("Fed the cows breakfast")
+                .title("Feeding the zebras")
+                .description("Fed the zebras breakfast")
                 .foods(veggies)
-                .animals(cows)
+                .animals(zebras)
                 .build();
         eventRepository.save(event1);
 
@@ -67,7 +67,7 @@ public class Initializer implements CommandLineRunner {
                 .id(2L)
                 .date(Instant.now())
                 .title("Feeding the lions")
-                .description("Fed the lions break fast")
+                .description("Fed the lions breakfast")
                 .foods(meats)
                 .animals(lions)
                 .build();
