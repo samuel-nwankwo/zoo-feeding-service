@@ -18,7 +18,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = EntityIsReferencedException.class)
     public ResponseEntity<Object> exception(EntityIsReferencedException exception){
-        return new ResponseEntity<>("All references to specified entity should be deleted first", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("All references to specified entity should be deleted first", HttpStatus.BAD_REQUEST);
     }
 
 }

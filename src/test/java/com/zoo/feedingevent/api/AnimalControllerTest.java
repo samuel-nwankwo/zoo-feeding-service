@@ -54,9 +54,7 @@ public class AnimalControllerTest {
         mockMvc.perform((MockMvcRequestBuilders.get("/animal/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
-                .andExpect(jsonPath("$.name", Matchers.equalTo("simba")))
-                .andExpect(jsonPath("$.breed", Matchers.equalTo("lion")));
+                .andExpect(jsonPath("$.id", Matchers.equalTo(1)));
     }
     @Test
     public void testGetAnimalThatDoesNotExist() throws Exception {
@@ -69,35 +67,31 @@ public class AnimalControllerTest {
     }
     @Test
     public void testCreateAnimal() throws Exception {
-        Animal lion = new Animal(1L, "mufasa","lion");
+        Animal lion = new Animal(1L, "lion1","lion");
         Mockito.when(animalRepository.save(ArgumentMatchers.any())).thenReturn(lion);
         String json = mapper.writeValueAsString(lion);
         mockMvc.perform(post("/animal").contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status()
                 .isCreated())
-                .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
-                .andExpect(jsonPath("$.name", Matchers.equalTo("mufasa")))
-                .andExpect(jsonPath("$.breed", Matchers.equalTo("lion")));
+                .andExpect(jsonPath("$.id", Matchers.equalTo(1)));
     }
     @Test
     public void testUpdateAnimal() throws Exception {
-        Animal lion = new Animal(2L, "nala", "lion");
+        Animal lion = new Animal(2L, "lion2", "lion");
         Mockito.when(animalRepository.save(ArgumentMatchers.any())).thenReturn(lion);
         String json = mapper.writeValueAsString(lion);
         mockMvc.perform((MockMvcRequestBuilders.put("/animal/{id}","2")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
                 .content(json).accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", Matchers.equalTo(2)))
-                .andExpect(jsonPath("$.name", Matchers.equalTo("nala")))
-                .andExpect(jsonPath("$.breed", Matchers.equalTo("lion")));
+                .andExpect(jsonPath("$.id", Matchers.equalTo(2)));
     }
 
     @Test
     public void testDeleteAnimal() throws Exception {
-        Animal lion = new Animal(1L, "scar","lion");
+        Animal lion = new Animal(3L, "lion3","lion");
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/animal/{id}", "1")
+                .delete("/animal/{id}", "3")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
