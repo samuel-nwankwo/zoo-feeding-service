@@ -1,11 +1,12 @@
 package com.zoo.feedingevent.api;
 
+import com.zoo.feedingevent.exception.AnimalIsReferencedException;
 import com.zoo.feedingevent.exception.AnimalNotFoundException;
 import com.zoo.feedingevent.model.Animal;
 import com.zoo.feedingevent.repository.AnimalRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -48,21 +49,30 @@ public class AnimalController {
                 .body(result);
     }
     @PutMapping("/animal/{id}")
-    public ResponseEntity<Animal> updateAnimal(@Validated @RequestBody Animal animal) {
+    public ResponseEntity<Animal> updateAnimal(@PathVariable(value = "id") Long id, @Validated @RequestBody Animal animal) {
         log.info("Request to update animal: {}", animal);
-        Animal result = animalRepository.save(animal);
-        return ResponseEntity.ok().body(result);
+        if(animalRepository.findById(id).isPresent()) {
+            Animal result = animalRepository.save(animal);
+            return ResponseEntity.ok().body(result);
+        }else{
+            throw new AnimalNotFoundException();
+        }
     }
     @DeleteMapping("/animal/{id}")
     public ResponseEntity<?> deleteAnimal(@PathVariable Long id) {
         log.info("Request to delete animal: {}", id);
         Optional<Animal> animal = animalRepository.findById(id);
-        if(animal.isPresent()){
-            animalRepository.deleteById(id);
-            return ResponseEntity.ok().build();
+        try {
+            if (animal.isPresent()) {
+                animalRepository.deleteById(id);
+                return ResponseEntity.ok().build();
+            } else {
+                throw new AnimalNotFoundException();
+            }
+        }catch(DataIntegrityViolationException e){
+            log.error("System error: {}",e.getMessage());
+            throw new AnimalIsReferencedException();
         }
-        else{
-            throw new AnimalNotFoundException();
-        }
+
     }
 }
