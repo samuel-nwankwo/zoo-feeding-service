@@ -47,7 +47,7 @@ public class AnimalControllerTest {
 
     @Test
     public void testGetAnimalById() throws Exception {
-        Animal lion = new Animal(1L,"simba","lion");
+        Animal lion = new Animal(1L,"lion1","lion");
 
         Mockito.when(animalRepository.findById(ArgumentMatchers.any()))
                 .thenReturn(Optional.of(lion));
@@ -57,6 +57,15 @@ public class AnimalControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
                 .andExpect(jsonPath("$.name", Matchers.equalTo("simba")))
                 .andExpect(jsonPath("$.breed", Matchers.equalTo("lion")));
+    }
+    @Test
+    public void testGetAnimalThatDoesNotExist() throws Exception {
+
+        Mockito.when(animalRepository.findById(ArgumentMatchers.any()))
+                .thenReturn(Optional.empty());
+        mockMvc.perform((MockMvcRequestBuilders.get("/animal/{id}", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))).andExpect(status().isNotFound());
     }
     @Test
     public void testCreateAnimal() throws Exception {
