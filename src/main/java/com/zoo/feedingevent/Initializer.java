@@ -71,7 +71,7 @@ public class Initializer implements CommandLineRunner {
                 .foods(meats)
                 .animals(lions)
                 .build();
-        eventRepository.save(event1);
+        eventRepository.save(event2);
     }
 
 }
