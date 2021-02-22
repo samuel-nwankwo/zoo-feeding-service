@@ -1,4 +1,5 @@
 package com.zoo.feedingevent.api;
+import com.zoo.feedingevent.exception.EntityNotFoundException;
 import com.zoo.feedingevent.model.Event;
 import com.zoo.feedingevent.repository.EventRepository;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public class EventController {
     public ResponseEntity<?> getEventById(@PathVariable Long id) {
         Optional<Event> event = eventRepository.findById(id);
         return event.map(response -> ResponseEntity.ok().body(response))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseThrow(EntityNotFoundException::new);
     }
     @PostMapping("/event")
     public ResponseEntity<Event> createEvent(@Validated @RequestBody Event event) throws URISyntaxException {
