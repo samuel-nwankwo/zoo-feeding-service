@@ -11,8 +11,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ExceptionController extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = EntityNotFoundException.class)
-    public ResponseEntity<Object> exception(EntityNotFoundException exception){
+    @ExceptionHandler(value = NoEntityFoundException.class)
+    public ResponseEntity<Object> exception(NoEntityFoundException exception){
         return new ResponseEntity<>("The entity at specified id could not be found", HttpStatus.NOT_FOUND);
     }
 
@@ -20,5 +20,8 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> exception(EntityIsReferencedException exception){
         return new ResponseEntity<>("All references to specified entity should be deleted first", HttpStatus.BAD_REQUEST);
     }
-
+    @ExceptionHandler(value = InvalidEntryException.class)
+    public ResponseEntity<Object> exception(InvalidEntryException exception){
+        return new ResponseEntity<>("One or more of the fields entered are incorrect", HttpStatus.BAD_REQUEST);
+    }
 }
