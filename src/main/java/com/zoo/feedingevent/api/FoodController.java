@@ -1,7 +1,7 @@
 package com.zoo.feedingevent.api;
 
 import com.zoo.feedingevent.exception.EntityIsReferencedException;
-import com.zoo.feedingevent.exception.EntityNotFoundException;
+import com.zoo.feedingevent.exception.NoEntityFoundException;
 import com.zoo.feedingevent.model.Food;
 import com.zoo.feedingevent.repository.FoodRepository;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public class FoodController{
     public ResponseEntity<?> getFoodById(@PathVariable Long id) {
         Optional<Food> food = foodRepository.findById(id);
         return food.map(response -> ResponseEntity.ok().body(response))
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(NoEntityFoundException::new);
     }
 
     @PostMapping("/food")
@@ -54,7 +54,7 @@ public class FoodController{
             Food result = foodRepository.save(food);
             return ResponseEntity.ok().body(result);
         }else{
-            throw new EntityNotFoundException();
+            throw new NoEntityFoundException();
         }
     }
     @DeleteMapping("/food/{id}")
@@ -66,7 +66,7 @@ public class FoodController{
                 foodRepository.deleteById(id);
                 return ResponseEntity.ok().build();
             } else {
-                throw new EntityNotFoundException();
+                throw new NoEntityFoundException();
             }
         } catch (DataIntegrityViolationException e) {
             log.error("System error: {}", e.getMessage());
