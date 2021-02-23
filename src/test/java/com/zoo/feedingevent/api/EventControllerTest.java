@@ -56,6 +56,16 @@ public class EventControllerTest {
                 .andExpect(jsonPath("$.title", Matchers.equalTo(title)));
     }
     @Test
+    public void testGetEventThatDoesNotExist() throws Exception {
+
+        Mockito.when(eventRepository.findById(ArgumentMatchers.any()))
+                .thenReturn(Optional.empty());
+        mockMvc.perform((MockMvcRequestBuilders.get("/event/{id}", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))).andExpect(status().isNotFound());
+    }
+
+    @Test
     public void testCreateEvent() throws Exception {
         String title = "Creating an event";
         Event event3 = new Event(1L,title);
