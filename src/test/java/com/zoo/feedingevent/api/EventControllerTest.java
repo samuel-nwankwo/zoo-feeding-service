@@ -1,6 +1,7 @@
 package com.zoo.feedingevent.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zoo.feedingevent.model.Animal;
 import com.zoo.feedingevent.model.Event;
 import com.zoo.feedingevent.repository.EventRepository;
 import org.hamcrest.Matchers;
@@ -11,15 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+import java.util.*;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,6 +76,22 @@ public class EventControllerTest {
                 .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status()
                 .isCreated())
                 .andExpect(jsonPath("$.title", Matchers.equalTo(title)));
+    }
+    @Test
+    public void testEventWithInvalidInput() throws Exception {
+        String title = "Creating an event";
+        Set<Animal> animals = new HashSet<>();
+        animals.add(new Animal(1L,"Jack","kangaroo"));
+        Event event = new Event(1L,title);
+        event.setAnimals(animals);
+
+        Mockito.when(eventRepository.save(ArgumentMatchers.any())).thenThrow(
+                new JpaObjectRetrievalFailureException(new EntityNotFoundException()));
+        String json = mapper.writeValueAsString(event);
+        mockMvc.perform(post("/event").contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status()
+                .isBadRequest());
     }
     @Test
     public void testUpdateEvent() throws Exception {
