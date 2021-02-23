@@ -1,4 +1,5 @@
 package com.zoo.feedingevent.api;
+import com.zoo.feedingevent.exception.InvalidEntryException;
 import com.zoo.feedingevent.exception.NoEntityFoundException;
 import com.zoo.feedingevent.model.Event;
 import com.zoo.feedingevent.repository.EventRepository;
@@ -38,7 +39,6 @@ public class EventController {
         return event.map(response -> ResponseEntity.ok().body(response))
                 .orElseThrow(NoEntityFoundException::new);
     }
-    //Error is thrown when trying to post an animal  or food that does not exist
     @PostMapping("/event")
     public ResponseEntity<Event> createEvent(@Validated @RequestBody Event event) throws URISyntaxException {
         try {
@@ -47,22 +47,31 @@ public class EventController {
             return ResponseEntity.created(new URI("/event/" + result.getId()))
                     .body(result);
         }catch(JpaObjectRetrievalFailureException e){
-            throw new NoEntityFoundException();
+            throw new InvalidEntryException();
         }
     }
-    //Error is thrown when adding an animal or food that is not present
-    //Error is thrown when event does not exist
     @PutMapping("/event/{id}")
-    public ResponseEntity<Event> updateEvent(@Validated @RequestBody Event event) {
+    public ResponseEntity<Event> updateEvent(@Validated @PathVariable Long id, @RequestBody Event event) {
         log.info("Request to update event: {}", event);
-        Event result = eventRepository.save(event);
-        return ResponseEntity.ok().body(result);
+        try {
+            if (eventRepository.findById(id).isPresent()) {
+                Event result = eventRepository.save(event);
+                return ResponseEntity.ok().body(result);
+            } else {
+                throw new NoEntityFoundException();
+            }
+        }catch(JpaObjectRetrievalFailureException e){
+            throw new InvalidEntryException();
+        }
     }
-    //Error is thrown if event does not exist
     @DeleteMapping("/event/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
         log.info("Request to delete event: {}", id);
+        if(eventRepository.findById(id).isPresent()){
         eventRepository.deleteById(id);
         return ResponseEntity.ok().build();
+        }else{
+            throw new NoEntityFoundException();
+        }
     }
 }
