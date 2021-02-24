@@ -49,6 +49,7 @@ public class AnimalController {
     }
     @PutMapping("/animal/{id}")
     public ResponseEntity<Animal> updateAnimal(@PathVariable(value = "id") Long id, @Validated @RequestBody Animal animal) {
+
         log.info("Request to update animal: {}", animal);
         if(animalRepository.findById(id).isPresent()) {
             Animal result = animalRepository.save(animal);

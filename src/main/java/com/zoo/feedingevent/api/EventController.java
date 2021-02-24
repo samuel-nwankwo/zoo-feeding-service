@@ -26,7 +26,6 @@ public class EventController {
     public EventController(EventRepository eventRepository){
         this.eventRepository = eventRepository;
     }
-
     @GetMapping("/")
     public ResponseEntity<List<Event>> getAllEvents(){
         List<Event> events = new ArrayList<>();

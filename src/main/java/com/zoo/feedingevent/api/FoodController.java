@@ -22,11 +22,9 @@ public class FoodController{
     private final Logger log = LoggerFactory.getLogger(FoodController.class);
     private final FoodRepository foodRepository;
 
-
     public FoodController(FoodRepository foodRepository) {
         this.foodRepository= foodRepository;
     }
-
     @GetMapping("/food")
     public ResponseEntity<List<Food>> getAllFoods() {
         List<Food> foods = new ArrayList<>();
