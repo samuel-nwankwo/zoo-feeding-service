@@ -58,9 +58,8 @@ public class FoodController{
     @DeleteMapping("/food/{id}")
     public ResponseEntity<?> deleteFood(@PathVariable Long id) {
         log.info("Request to delete food: {}", id);
-        Optional<Food> food = foodRepository.findById(id);
         try{
-            if (food.isPresent()) {
+            if (foodRepository.findById(id).isPresent()) {
                 foodRepository.deleteById(id);
                 return ResponseEntity.ok().build();
             } else {
