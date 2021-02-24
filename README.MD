@@ -60,7 +60,7 @@ To run tests use the command mvnw test.
 [SpringBoot](https://spring.io/projects/spring-boot) - Initial Starter Dependencies <br />
 [Spring Data Jpa](https://spring.io/projects/spring-data-jpa) - Data Access <br />
 [HSQLDB]() - Embedded Database <br />
-[Lombok]() - annotation processing <br />
+[Lombok]() - Annotation Processing <br />
 ### Authors
 Samuel Nwankwo
 
