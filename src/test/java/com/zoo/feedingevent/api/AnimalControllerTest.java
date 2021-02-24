@@ -36,8 +36,8 @@ public class AnimalControllerTest {
     @Test
     public void testGetAllAnimals() throws Exception {
         List<Animal> animalList = new ArrayList<>();
-        Animal lion = new Animal("lion");
-        animalList.add(lion);
+        Animal animal = new Animal("lion");
+        animalList.add(animal);
         Mockito.when(animalRepository.findAll()).thenReturn(animalList);
         mockMvc.perform(get("/animal")).andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
@@ -47,10 +47,10 @@ public class AnimalControllerTest {
 
     @Test
     public void testGetAnimalById() throws Exception {
-        Animal lion = new Animal(1L,"lion1","lion");
+        Animal animal = new Animal(1L,"lion1","lion");
 
         Mockito.when(animalRepository.findById(ArgumentMatchers.any()))
-                .thenReturn(Optional.of(lion));
+                .thenReturn(Optional.of(animal));
         mockMvc.perform((MockMvcRequestBuilders.get("/animal/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
@@ -67,9 +67,9 @@ public class AnimalControllerTest {
     }
     @Test
     public void testCreateAnimal() throws Exception {
-        Animal lion = new Animal(1L, "lion1","lion");
-        Mockito.when(animalRepository.save(ArgumentMatchers.any())).thenReturn(lion);
-        String json = mapper.writeValueAsString(lion);
+        Animal animal = new Animal(1L, "lion1","lion");
+        Mockito.when(animalRepository.save(ArgumentMatchers.any())).thenReturn(animal);
+        String json = mapper.writeValueAsString(animal);
         mockMvc.perform(post("/animal").contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status()
@@ -78,9 +78,10 @@ public class AnimalControllerTest {
     }
     @Test
     public void testUpdateAnimal() throws Exception {
-        Animal lion = new Animal(2L, "lion2", "lion");
-        Mockito.when(animalRepository.save(ArgumentMatchers.any())).thenReturn(lion);
-        String json = mapper.writeValueAsString(lion);
+        Animal animal = new Animal(2L, "lion", "lion");
+        Mockito.when(animalRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.of(animal));
+        Mockito.when(animalRepository.save(ArgumentMatchers.any())).thenReturn(animal);
+        String json = mapper.writeValueAsString(animal);
         mockMvc.perform((MockMvcRequestBuilders.put("/animal/{id}","2")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
                 .content(json).accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
@@ -89,8 +90,9 @@ public class AnimalControllerTest {
 
     @Test
     public void testDeleteAnimal() throws Exception {
-        Animal lion = new Animal(3L, "lion","lion");
-        Mockito.when(animalRepository.findById(lion.getId())).thenReturn(Optional.of(lion));
+        Animal animal = new Animal(3L, "lion","lion");
+        Mockito.when(animalRepository.findById(animal.getId())).thenReturn(Optional.of(animal));
+        Mockito.doNothing().when(animalRepository).deleteById(animal.getId());
         mockMvc.perform(MockMvcRequestBuilders
                 .delete("/animal/{id}", "3")
                 .contentType(MediaType.APPLICATION_JSON)

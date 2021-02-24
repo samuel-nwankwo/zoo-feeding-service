@@ -96,9 +96,10 @@ public class EventControllerTest {
     @Test
     public void testUpdateEvent() throws Exception {
         String title = "Updating an event";
-        Event event4 = new Event(1L,title);
-        Mockito.when(eventRepository.save(ArgumentMatchers.any())).thenReturn(event4);
-        String json = mapper.writeValueAsString(event4);
+        Event event = new Event(1L,title);
+        Mockito.when(eventRepository.save(ArgumentMatchers.any())).thenReturn(event);
+        Mockito.when(eventRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.of(event));
+        String json = mapper.writeValueAsString(event);
         mockMvc.perform((MockMvcRequestBuilders.put("/event/{id}","1")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
                 .content(json).accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
@@ -109,6 +110,7 @@ public class EventControllerTest {
     public void testDeleteEvent() throws Exception {
         Event event = new Event(1L,"Delete an event");
         Mockito.when(eventRepository.findById(event.getId())).thenReturn(Optional.of(event));
+        Mockito.doNothing().when(eventRepository).deleteById(event.getId());
         mockMvc.perform(MockMvcRequestBuilders
                 .delete("/event/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)

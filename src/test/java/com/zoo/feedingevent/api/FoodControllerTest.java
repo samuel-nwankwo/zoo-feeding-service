@@ -84,6 +84,7 @@ public class FoodControllerTest {
     public void testUpdateFood() throws Exception {
         Food food = new Food(2L, "hay");
         Mockito.when(foodRepository.save(ArgumentMatchers.any())).thenReturn(food);
+        Mockito.when(foodRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.of(food));
         String json = mapper.writeValueAsString(food);
         mockMvc.perform((MockMvcRequestBuilders.put("/food/{id}","2")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
@@ -96,6 +97,7 @@ public class FoodControllerTest {
     public void testDeleteFood() throws Exception {
         Food food = new Food(1L, "hay");
         Mockito.when(foodRepository.findById(food.getId())).thenReturn(Optional.of(food));
+        Mockito.doNothing().when(foodRepository).deleteById(food.getId());
         mockMvc.perform(MockMvcRequestBuilders
                 .delete("/food/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
