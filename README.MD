@@ -55,12 +55,12 @@ To run tests use the command mvnw test.
 
 
 ### Built With
-[Maven](https://maven.apache.org/) - Dependency Management
-[Swagger-UI]() - Visual Api Documentation
-[SpringBoot](https://spring.io/projects/spring-boot) - Initial Starter Dependencies 
-[Spring Data Jpa](https://spring.io/projects/spring-data-jpa) - Data Access
-[HSQLDB]() - Embedded Database
-[Lombok]() - annotation processing
+[Maven](https://maven.apache.org/) - Dependency Management <br />
+[Swagger-UI]() - Visual Api Documentation <br />
+[SpringBoot](https://spring.io/projects/spring-boot) - Initial Starter Dependencies <br />
+[Spring Data Jpa](https://spring.io/projects/spring-data-jpa) - Data Access <br />
+[HSQLDB]() - Embedded Database <br />
+[Lombok]() - annotation processing <br />
 ### Authors
 Samuel Nwankwo
 
