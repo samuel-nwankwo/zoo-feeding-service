@@ -38,8 +38,8 @@ public class FoodControllerTest {
     @Test
     public void testGetAllFoods() throws Exception {
         List<Food> foodList = new ArrayList<>();
-        Food grass = new Food(1L,"grass");
-        foodList.add(grass);
+        Food food = new Food(1L,"grass");
+        foodList.add(food);
         Mockito.when(foodRepository.findAll()).thenReturn(foodList);
         mockMvc.perform(get("/food")).andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
@@ -70,9 +70,9 @@ public class FoodControllerTest {
 
     @Test
     public void testCreateFood() throws Exception {
-        Food grass = new Food(1L, "grass");
-        Mockito.when(foodRepository.save(ArgumentMatchers.any())).thenReturn(grass);
-        String json = mapper.writeValueAsString(grass);
+        Food food = new Food(1L, "grass");
+        Mockito.when(foodRepository.save(ArgumentMatchers.any())).thenReturn(food);
+        String json = mapper.writeValueAsString(food);
         mockMvc.perform(post("/food").contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .content(json).accept(MediaType.APPLICATION_JSON)).andExpect(status()
@@ -82,9 +82,9 @@ public class FoodControllerTest {
     }
     @Test
     public void testUpdateFood() throws Exception {
-        Food hay = new Food(2L, "hay");
-        Mockito.when(foodRepository.save(ArgumentMatchers.any())).thenReturn(hay);
-        String json = mapper.writeValueAsString(hay);
+        Food food = new Food(2L, "hay");
+        Mockito.when(foodRepository.save(ArgumentMatchers.any())).thenReturn(food);
+        String json = mapper.writeValueAsString(food);
         mockMvc.perform((MockMvcRequestBuilders.put("/food/{id}","2")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
                 .content(json).accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
@@ -94,7 +94,8 @@ public class FoodControllerTest {
 
     @Test
     public void testDeleteFood() throws Exception {
-        Food hay = new Food(1L, "hay");
+        Food food = new Food(1L, "hay");
+        Mockito.when(foodRepository.findById(food.getId())).thenReturn(Optional.of(food));
         mockMvc.perform(MockMvcRequestBuilders
                 .delete("/food/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)

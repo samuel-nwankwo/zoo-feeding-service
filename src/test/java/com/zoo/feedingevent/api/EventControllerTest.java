@@ -107,7 +107,8 @@ public class EventControllerTest {
     }
     @Test
     public void testDeleteEvent() throws Exception {
-        Event lion = new Event(1L,"Delete an event");
+        Event event = new Event(1L,"Delete an event");
+        Mockito.when(eventRepository.findById(event.getId())).thenReturn(Optional.of(event));
         mockMvc.perform(MockMvcRequestBuilders
                 .delete("/event/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)

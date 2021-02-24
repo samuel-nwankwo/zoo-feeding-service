@@ -89,7 +89,8 @@ public class AnimalControllerTest {
 
     @Test
     public void testDeleteAnimal() throws Exception {
-        Animal lion = new Animal(3L, "lion3","lion");
+        Animal lion = new Animal(3L, "lion","lion");
+        Mockito.when(animalRepository.findById(lion.getId())).thenReturn(Optional.of(lion));
         mockMvc.perform(MockMvcRequestBuilders
                 .delete("/animal/{id}", "3")
                 .contentType(MediaType.APPLICATION_JSON)
