@@ -27,7 +27,6 @@ public class AnimalController {
     public AnimalController(AnimalRepository animalRepository) {
         this.animalRepository = animalRepository;
     }
-
     @GetMapping("/animal")
     public ResponseEntity<List<Animal>> getAllAnimals() {
         List<Animal> animals = new ArrayList<>();
@@ -61,10 +60,8 @@ public class AnimalController {
     @DeleteMapping("/animal/{id}")
     public ResponseEntity<?> deleteAnimal(@PathVariable Long id) {
         log.info("Request to delete animal: {}", id);
-        Optional<Animal> animal = animalRepository.findById(id);
         try {
-            if (animal.isPresent()) {
-                animalRepository.deleteById(id);
+            if (animalRepository.findById(id).isPresent()) {
                 return ResponseEntity.ok().build();
             } else {
                 throw new NoEntityFoundException();
@@ -73,6 +70,5 @@ public class AnimalController {
             log.error("System error: {}",e.getMessage());
             throw new EntityIsReferencedException();
         }
-
     }
 }
