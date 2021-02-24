@@ -63,6 +63,7 @@ public class AnimalController {
         log.info("Request to delete animal: {}", id);
         try {
             if (animalRepository.findById(id).isPresent()) {
+                animalRepository.deleteById(id);
                 return ResponseEntity.ok().build();
             } else {
                 throw new NoEntityFoundException();
