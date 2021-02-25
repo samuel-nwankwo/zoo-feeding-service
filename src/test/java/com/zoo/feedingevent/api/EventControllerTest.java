@@ -94,7 +94,7 @@ public class EventControllerTest {
         mockMvc.perform((MockMvcRequestBuilders.put("/event/{id}","1")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8")
                 .content(json).accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", Matchers.equalTo(1L)))
+                .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
                 .andExpect(jsonPath("$.title", Matchers.equalTo("Updating an event")));
     }
     @Test
