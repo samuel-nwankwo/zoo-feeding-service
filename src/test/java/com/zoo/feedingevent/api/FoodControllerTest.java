@@ -49,7 +49,6 @@ public class FoodControllerTest {
     @Test
     public void testGetFoodById() throws Exception {
         Food food = new Food(1L,"grass");
-
         Mockito.when(foodRepository.findById(ArgumentMatchers.any()))
                 .thenReturn(Optional.of(food));
         mockMvc.perform((MockMvcRequestBuilders.get("/food/{id}", "1")
@@ -60,7 +59,6 @@ public class FoodControllerTest {
     }
     @Test
     public void testGetFoodThatDoesNotExist() throws Exception {
-
         Mockito.when(foodRepository.findById(ArgumentMatchers.any()))
                 .thenReturn(Optional.empty());
         mockMvc.perform((MockMvcRequestBuilders.get("/food/{id}", "1")
@@ -92,7 +90,6 @@ public class FoodControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.equalTo(2)))
                 .andExpect(jsonPath("$.name", Matchers.equalTo("hay")));
     }
-
     @Test
     public void testDeleteFood() throws Exception {
         Food food = new Food(1L, "hay");
