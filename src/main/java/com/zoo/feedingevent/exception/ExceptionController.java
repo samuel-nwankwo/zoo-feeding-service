@@ -15,7 +15,6 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> exception(NoEntityFoundException exception){
         return new ResponseEntity<>("The entity at specified id could not be found", HttpStatus.NOT_FOUND);
     }
-
     @ExceptionHandler(value = EntityIsReferencedException.class)
     public ResponseEntity<Object> exception(EntityIsReferencedException exception){
         return new ResponseEntity<>("All references to specified entity should be deleted first", HttpStatus.BAD_REQUEST);
