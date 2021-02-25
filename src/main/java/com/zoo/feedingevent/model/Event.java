@@ -14,6 +14,7 @@ import java.util.Set;
 @Builder
 @Entity
 public class Event {
+
     @Id
     @NonNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
