@@ -54,7 +54,7 @@ public class FoodControllerTest {
         mockMvc.perform((MockMvcRequestBuilders.get("/food/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
+                .andExpect(jsonPath("$.id", Matchers.equalTo(1L)))
                 .andExpect(jsonPath("$.name", Matchers.equalTo("grass")));
     }
     @Test
