@@ -37,7 +37,6 @@ public class FoodController{
         return food.map(response -> ResponseEntity.ok().body(response))
                 .orElseThrow(NoEntityFoundException::new);
     }
-
     @PostMapping("/food")
     public ResponseEntity<Food> createFood(@Validated @RequestBody Food food) throws URISyntaxException {
         log.info("Request to create food: {}", food);
@@ -70,5 +69,4 @@ public class FoodController{
             throw new EntityIsReferencedException();
         }
     }
-
 }

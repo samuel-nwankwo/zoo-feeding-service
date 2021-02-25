@@ -32,7 +32,6 @@ public class AnimalController {
         List<Animal> animals = new ArrayList<>();
         animalRepository.findAll().forEach(animals::add);
         return new ResponseEntity<>(animals, HttpStatus.OK);
-
     }
     @GetMapping("/animal/{id}")
     public ResponseEntity<?> getAnimalById(@PathVariable Long id) {
@@ -44,12 +43,10 @@ public class AnimalController {
     public ResponseEntity<Animal> createAnimal(@Validated @RequestBody Animal animal) throws URISyntaxException {
         log.info("Request to create animal: {}", animal);
         Animal result = animalRepository.save(animal);
-        return ResponseEntity.created(new URI("/animal/" + result.getId()))
-                .body(result);
+        return ResponseEntity.created(new URI("/animal/" + result.getId())).body(result);
     }
     @PutMapping("/animal/{id}")
     public ResponseEntity<Animal> updateAnimal(@PathVariable(value = "id") Long id, @Validated @RequestBody Animal animal) {
-
         log.info("Request to update animal: {}", animal);
         if(animalRepository.findById(id).isPresent()) {
             Animal result = animalRepository.save(animal);

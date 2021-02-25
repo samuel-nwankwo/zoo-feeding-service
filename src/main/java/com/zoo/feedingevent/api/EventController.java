@@ -43,8 +43,7 @@ public class EventController {
         try {
             log.info("Request to create event: {}", event);
             Event result = eventRepository.save(event);
-            return ResponseEntity.created(new URI("/event/" + result.getId()))
-                    .body(result);
+            return ResponseEntity.created(new URI("/event/" + result.getId())).body(result);
         }catch(JpaObjectRetrievalFailureException e){
             throw new InvalidEntryException();
         }
