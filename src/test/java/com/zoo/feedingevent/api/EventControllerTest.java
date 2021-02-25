@@ -57,14 +57,12 @@ public class EventControllerTest {
     }
     @Test
     public void testGetEventThatDoesNotExist() throws Exception {
-
         Mockito.when(eventRepository.findById(ArgumentMatchers.any()))
                 .thenReturn(Optional.empty());
         mockMvc.perform((MockMvcRequestBuilders.get("/event/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))).andExpect(status().isNotFound());
     }
-
     @Test
     public void testCreateEvent() throws Exception {
         String title = "Creating an event";
@@ -84,7 +82,6 @@ public class EventControllerTest {
         animals.add(new Animal(1L,"Jack","kangaroo"));
         Event event = new Event(1L,title);
         event.setAnimals(animals);
-
         Mockito.when(eventRepository.save(ArgumentMatchers.any())).thenThrow(
                 new JpaObjectRetrievalFailureException(new EntityNotFoundException()));
         String json = mapper.writeValueAsString(event);
